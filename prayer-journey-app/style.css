@@ -1,0 +1,679 @@
+/* =============================================
+   Prayer & Praise Journey - Style Sheet
+   Theme: "Joyful Dawn"
+   ============================================= */
+
+/* ----- CSS Variables (Joyful Dawn Palette) ----- */
+:root {
+  --bg: #FFF7ED;
+  --primary: #F97316;
+  --primary-hover: #EA580C;
+  --secondary: #8B5CF6;
+  --secondary-hover: #7C3AED;
+  --success: #22C55E;
+  --success-light: #DCFCE7;
+  --accent: #FDE68A;
+  --text: #1F2937;
+  --text-light: #6B7280;
+  --card-bg: #FFFFFF;
+  --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --card-shadow-hover: 0 8px 28px rgba(0, 0, 0, 0.1);
+  --border: #FED7AA;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: 'Playfair Display', serif;
+  --transition: 0.3s ease;
+}
+
+/* ----- Reset & Base ----- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ----- App Header ----- */
+.app-header {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  padding: 32px 20px 28px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.app-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.header-content {
+  position: relative;
+  z-index: 1;
+}
+
+.app-title {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  line-height: 1.3;
+}
+
+.title-icon {
+  display: inline-block;
+  animation: gentle-bounce 3s ease-in-out infinite;
+}
+
+.title-icon:last-child {
+  animation-delay: 0.5s;
+}
+
+@keyframes gentle-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.app-subtitle {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-top: 6px;
+  font-weight: 300;
+}
+
+/* ----- Main Content Area ----- */
+.app-main {
+  flex: 1;
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+}
+
+/* ----- Section Headers ----- */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.section-header i {
+  font-size: 1.3rem;
+  color: var(--secondary);
+}
+
+.section-header h2 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ----- Bible Verse Section ----- */
+.verse-section {
+  margin-bottom: 28px;
+}
+
+.verse-card {
+  background: linear-gradient(135deg, #EEF2FF, #E0E7FF);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  border-left: 4px solid var(--secondary);
+  position: relative;
+}
+
+.verse-text {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--text);
+  font-style: italic;
+  margin-bottom: 8px;
+  transition: opacity var(--transition);
+}
+
+.verse-ref {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--secondary);
+  text-align: right;
+}
+
+/* Fade-in animation for verse */
+.verse-card.fade-in .verse-text,
+.verse-card.fade-in .verse-ref {
+  animation: fadeInVerse 0.8s ease forwards;
+}
+
+@keyframes fadeInVerse {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----- Faith Moments Section ----- */
+.faith-section {
+  margin-bottom: 28px;
+}
+
+.faith-card {
+  background: linear-gradient(135deg, var(--accent), #FEF3C7);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-left: 4px solid var(--primary);
+}
+
+.faith-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.faith-nav-btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: background var(--transition), transform var(--transition);
+  flex-shrink: 0;
+}
+
+.faith-nav-btn:hover {
+  background: var(--primary-hover);
+  transform: scale(1.1);
+}
+
+.faith-nav-btn:active {
+  transform: scale(0.95);
+}
+
+/* ----- Form Section ----- */
+.form-section {
+  margin-bottom: 32px;
+}
+
+.prayer-form {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border);
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  border: 2px solid #FED7AA;
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color var(--transition), box-shadow var(--transition);
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+/* ----- Buttons ----- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 22px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+.btn-small {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+}
+
+.btn-success {
+  background: var(--success);
+  color: #fff;
+}
+
+.btn-success:hover {
+  background: #16A34A;
+}
+
+.btn-secondary {
+  background: var(--secondary);
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background: var(--secondary-hover);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
+
+.btn-outline:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-danger {
+  background: #EF4444;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #DC2626;
+}
+
+.btn-song {
+  background: transparent;
+  border: 1px solid var(--secondary);
+  color: var(--secondary);
+  font-size: 0.78rem;
+  padding: 4px 12px;
+}
+
+.btn-song:hover {
+  background: var(--secondary);
+  color: #fff;
+}
+
+/* ----- Filter Bar ----- */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 6px 16px;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  background: var(--card-bg);
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.filter-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.filter-btn.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* ----- Prayer Count Badge ----- */
+.prayer-count {
+  margin-left: auto;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 20px;
+  min-width: 24px;
+  text-align: center;
+}
+
+/* ----- Prayer List / Grid ----- */
+.list-section {
+  margin-bottom: 32px;
+}
+
+.prayer-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ----- Prayer Card ----- */
+.prayer-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid #FEF3C7;
+  border-left: 4px solid var(--primary);
+  transition: box-shadow var(--transition), transform var(--transition);
+  position: relative;
+}
+
+.prayer-card:hover {
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-2px);
+}
+
+/* Answered prayer card style */
+.prayer-card.answered {
+  border-left-color: var(--success);
+  background: linear-gradient(135deg, #FFFFFF, var(--success-light));
+  border-color: #BBF7D0;
+}
+
+.prayer-card.answered .card-status-badge {
+  background: var(--success);
+  color: #fff;
+}
+
+/* Card header */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+  flex: 1;
+}
+
+.card-status-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--accent);
+  color: #92400E;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Card body */
+.card-desc {
+  font-size: 0.88rem;
+  color: var(--text-light);
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.card-date {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin-bottom: 6px;
+}
+
+.card-answered-date {
+  font-size: 0.75rem;
+  color: var(--success);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* Card actions */
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #FEF3C7;
+}
+
+/* Gratitude note */
+.gratitude-section {
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--success-light);
+  border-radius: var(--radius-sm);
+  border: 1px solid #BBF7D0;
+}
+
+.gratitude-section label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #166534;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.gratitude-section textarea {
+  width: 100%;
+  padding: 8px 12px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  border: 1px solid #BBF7D0;
+  border-radius: var(--radius-xs);
+  background: #fff;
+  color: var(--text);
+  resize: vertical;
+  min-height: 50px;
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.gratitude-section textarea:focus {
+  border-color: var(--success);
+}
+
+.gratitude-section .gratitude-text {
+  font-size: 0.85rem;
+  color: #166534;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.gratitude-section .gratitude-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.gratitude-section .gratitude-actions .btn {
+  padding: 4px 12px;
+  font-size: 0.75rem;
+}
+
+/* Song link button inside card */
+.card-song-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ----- Empty State ----- */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-light);
+}
+
+.empty-state i {
+  font-size: 3rem;
+  color: #FED7AA;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.empty-state p {
+  font-size: 0.95rem;
+}
+
+/* ----- Footer ----- */
+.app-footer {
+  text-align: center;
+  padding: 24px 16px;
+  color: var(--text-light);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+}
+
+/* ----- Responsive: Tablet & Up ----- */
+@media (min-width: 640px) {
+  .app-title {
+    font-size: 2.2rem;
+  }
+
+  .app-subtitle {
+    font-size: 1rem;
+  }
+
+  .app-main {
+    padding: 28px 24px 50px;
+  }
+
+  .prayer-form {
+    padding: 28px;
+  }
+
+  .verse-text {
+    font-size: 1.15rem;
+  }
+
+  .prayer-card {
+    padding: 22px 24px;
+  }
+
+  .card-actions {
+    gap: 10px;
+  }
+
+  .btn {
+    padding: 12px 28px;
+    font-size: 0.95rem;
+  }
+
+  .btn-primary {
+    width: auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .app-main {
+    padding: 32px 32px 60px;
+  }
+
+  .prayer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .prayer-card:hover {
+    transform: translateY(-3px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .app-main {
+    max-width: 840px;
+  }
+
+  .prayer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ----- Utility: Hidden ----- */
+.hidden {
+  display: none !important;
+}
