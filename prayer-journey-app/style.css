@@ -762,6 +762,198 @@ img {
   }
 }
 
+/* ----- Bible Study Section ----- */
+.bible-study-section {
+  margin-bottom: 32px;
+}
+
+.study-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid #E0E7FF;
+}
+
+.study-verse-card {
+  background: linear-gradient(135deg, #F5F3FF, #EDE9FE);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  border-left: 4px solid var(--secondary);
+  margin-bottom: 16px;
+  transition: opacity var(--transition);
+}
+
+.study-verse-text {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text);
+  font-style: italic;
+  margin-bottom: 6px;
+}
+
+.study-verse-ref {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--secondary);
+  text-align: right;
+}
+
+/* Fade-in for study verse */
+.study-verse-card.fade-in .study-verse-text,
+.study-verse-card.fade-in .study-verse-ref {
+  animation: fadeInVerse 0.7s ease forwards;
+}
+
+.study-reflection {
+  margin-bottom: 16px;
+}
+
+.study-reflection label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.study-reflection label i {
+  color: var(--secondary);
+  margin-right: 4px;
+}
+
+.study-reflection textarea {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  border: 2px solid #E0E7FF;
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  resize: vertical;
+  min-height: 70px;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.study-reflection textarea:focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+}
+
+.study-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.study-actions .btn-primary {
+  width: 100%;
+}
+
+.study-actions .btn-outline {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .study-actions {
+    flex-direction: row;
+  }
+
+  .study-actions .btn-primary,
+  .study-actions .btn-outline {
+    width: auto;
+  }
+
+  .study-card {
+    padding: 24px;
+  }
+
+  .study-verse-text {
+    font-size: 1.05rem;
+  }
+}
+
+.study-history {
+  margin-top: 20px;
+}
+
+.study-history .section-header {
+  margin-bottom: 12px;
+}
+
+.study-history .section-header h3 {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.study-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.study-list-item {
+  background: var(--card-bg);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  border: 1px solid #E0E7FF;
+  border-left: 3px solid var(--secondary);
+  transition: box-shadow var(--transition);
+}
+
+.study-list-item:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+
+.study-list-verse {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--secondary);
+  margin-bottom: 4px;
+}
+
+.study-list-reflection {
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.5;
+  margin-bottom: 4px;
+  font-style: italic;
+}
+
+.study-list-date {
+  font-size: 0.72rem;
+  color: var(--text-light);
+}
+
+.study-list-delete {
+  background: none;
+  border: none;
+  color: #EF4444;
+  cursor: pointer;
+  font-size: 0.72rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 4px;
+  transition: background var(--transition);
+}
+
+.study-list-delete:hover {
+  background: #FEE2E2;
+}
+
+@media (min-width: 768px) {
+  .study-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+}
+
 /* ----- Empty State ----- */
 .empty-state {
   text-align: center;

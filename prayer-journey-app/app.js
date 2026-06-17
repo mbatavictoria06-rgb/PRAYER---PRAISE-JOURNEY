@@ -71,9 +71,11 @@ const faithMoments = [
 
 // ===== STATE =====
 let prayers = [];
+let studies = [];
 let currentFilter = 'all';
 let editMode = false;
 let faithIndex = 0;
+let studyVerseIndex = 0;
 
 // ===== DOM REFERENCES =====
 const prayerForm = document.getElementById('prayerForm');
@@ -96,6 +98,16 @@ const statsAnswered = document.getElementById('statsAnswered');
 const statsPending = document.getElementById('statsPending');
 const gratitudeGrid = document.getElementById('gratitudeGrid');
 const emptyGratitude = document.getElementById('emptyGratitude');
+
+// Bible Study DOM references
+const studyVerseText = document.getElementById('studyVerseText');
+const studyVerseRef = document.getElementById('studyVerseRef');
+const studyVerseCard = document.getElementById('studyVerseCard');
+const studyReflection = document.getElementById('studyReflection');
+const markStudiedBtn = document.getElementById('markStudiedBtn');
+const nextStudyBtn = document.getElementById('nextStudyBtn');
+const studyList = document.getElementById('studyList');
+const emptyStudies = document.getElementById('emptyStudies');
 
 // ===== UTILITY FUNCTIONS =====
 
@@ -149,6 +161,21 @@ function saveToStorage() {
   localStorage.setItem('prayerJourney_prayers', JSON.stringify(prayers));
 }
 
+// ===== BIBLE STUDY LOCAL STORAGE =====
+
+function loadStudiesFromStorage() {
+  try {
+    const data = localStorage.getItem('prayerJourney_studies');
+    studies = data ? JSON.parse(data) : [];
+  } catch {
+    studies = [];
+  }
+}
+
+function saveStudiesToStorage() {
+  localStorage.setItem('prayerJourney_studies', JSON.stringify(studies));
+}
+
 // ===== BIBLE VERSE =====
 
 function showRandomVerse() {
@@ -161,6 +188,83 @@ function showRandomVerse() {
   // Force reflow to restart animation
   void verseCard.offsetWidth;
   verseCard.classList.add('fade-in');
+}
+
+// ===== BIBLE STUDY =====
+
+function showStudyVerse(index) {
+  const verse = bibleVerses[index];
+  studyVerseText.textContent = `"${verse.text}"`;
+  studyVerseRef.textContent = `— ${verse.ref}`;
+  // Trigger fade-in animation
+  studyVerseCard.classList.remove('fade-in');
+  void studyVerseCard.offsetWidth;
+  studyVerseCard.classList.add('fade-in');
+}
+
+function getRandomStudyVerse() {
+  studyVerseIndex = Math.floor(Math.random() * bibleVerses.length);
+  showStudyVerse(studyVerseIndex);
+}
+
+function markAsStudied() {
+  const reflection = studyReflection.value.trim();
+  if (!reflection) {
+    studyReflection.focus();
+    return;
+  }
+
+  const verse = bibleVerses[studyVerseIndex];
+  const study = {
+    id: generateId(),
+    verseText: verse.text,
+    verseRef: verse.ref,
+    reflection: reflection,
+    date: getShortDate()
+  };
+
+  studies.unshift(study);
+  saveStudiesToStorage();
+  renderStudyHistory();
+
+  // Clear reflection and show next verse
+  studyReflection.value = '';
+  getRandomStudyVerse();
+}
+
+function deleteStudy(id) {
+  if (!confirm('Delete this study entry?')) return;
+  studies = studies.filter(s => s.id !== id);
+  saveStudiesToStorage();
+  renderStudyHistory();
+}
+
+function renderStudyHistory() {
+  if (studies.length === 0) {
+    studyList.innerHTML = '';
+    emptyStudies.classList.remove('hidden');
+    return;
+  }
+
+  emptyStudies.classList.add('hidden');
+  studyList.innerHTML = '';
+
+  studies.forEach(study => {
+    const item = document.createElement('div');
+    item.className = 'study-list-item';
+    item.innerHTML = `
+      <p class="study-list-verse">${escapeHtml(study.verseRef)}</p>
+      <p class="study-list-reflection">"${escapeHtml(study.reflection)}"</p>
+      <p class="study-list-date">📖 ${study.date}</p>
+      <button class="study-list-delete" data-id="${study.id}">
+        <i class="fas fa-trash-alt"></i> Delete
+      </button>
+    `;
+    studyList.appendChild(item);
+
+    const deleteBtn = item.querySelector('.study-list-delete');
+    deleteBtn.addEventListener('click', () => deleteStudy(study.id));
+  });
 }
 
 // ===== FAITH MOMENTS =====
@@ -510,9 +614,12 @@ function escapeHtml(str) {
 
 function init() {
   loadFromStorage();
+  loadStudiesFromStorage();
   showRandomVerse();
   showFaithMoment(0);
+  getRandomStudyVerse();
   renderPrayers();
+  renderStudyHistory();
 
   // Event Listeners
   prayerForm.addEventListener('submit', handleFormSubmit);
@@ -521,6 +628,9 @@ function init() {
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => setFilter(btn.dataset.filter));
   });
+
+  markStudiedBtn.addEventListener('click', markAsStudied);
+  nextStudyBtn.addEventListener('click', getRandomStudyVerse);
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && editMode) {

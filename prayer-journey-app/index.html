@@ -90,6 +90,49 @@
       </div>
     </section>
 
+    <!-- ===== BIBLE STUDY ===== -->
+    <section class="bible-study-section">
+      <div class="section-header">
+        <i class="fas fa-book-open"></i>
+        <h2>Bible Study</h2>
+      </div>
+
+      <div class="study-card">
+        <div class="study-verse-card" id="studyVerseCard">
+          <p class="study-verse-text" id="studyVerseText">—</p>
+          <p class="study-verse-ref" id="studyVerseRef">—</p>
+        </div>
+
+        <div class="study-reflection">
+          <label for="studyReflection"><i class="fas fa-pen"></i> What did this verse mean to you?</label>
+          <textarea id="studyReflection" rows="3" placeholder="Write your reflection..."></textarea>
+        </div>
+
+        <div class="study-actions">
+          <button class="btn btn-primary" id="markStudiedBtn">
+            <i class="fas fa-check-circle"></i> Mark as Studied
+          </button>
+          <button class="btn btn-outline" id="nextStudyBtn">
+            <i class="fas fa-arrow-right"></i> Next Verse
+          </button>
+        </div>
+      </div>
+
+      <div class="study-history">
+        <div class="section-header">
+          <i class="fas fa-history"></i>
+          <h3>Past Studies</h3>
+        </div>
+        <div class="study-list" id="studyList">
+          <!-- Rendered by JavaScript -->
+        </div>
+        <div class="empty-state" id="emptyStudies">
+          <i class="fas fa-book"></i>
+          <p>No studies yet. Start your Bible study!</p>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== NEW PRAYER FORM ===== -->
     <section class="form-section">
       <div class="section-header">
