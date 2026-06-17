@@ -146,12 +146,30 @@ function formatWaitingDays(dateStr) {
   return days + ' days';
 }
 
+/** Format an ISO date string as "June 17, 2026" */
+function formatDate(isoString) {
+  if (!isoString) return '';
+  const d = new Date(isoString);
+  if (isNaN(d.getTime())) return isoString;
+  return d.toLocaleDateString('en-US', {
+    year: 'numeric', month: 'long', day: 'numeric'
+  });
+}
+
 // ===== LOCAL STORAGE =====
 
 function loadFromStorage() {
   try {
     const data = localStorage.getItem('prayerJourney_prayers');
     prayers = data ? JSON.parse(data) : [];
+    // Migrate older entries that may not have createdAt / answeredAt
+    prayers.forEach(p => {
+      if (!p.createdAt && p.date) p.createdAt = new Date(p.date).toISOString();
+      if (!p.createdAt) p.createdAt = new Date().toISOString();
+      if (p.status === 'answered' && !p.answeredAt && p.answeredDate) {
+        p.answeredAt = new Date(p.answeredDate).toISOString();
+      }
+    });
   } catch {
     prayers = [];
   }
@@ -310,7 +328,7 @@ function renderGratitudeGallery() {
     card.innerHTML = `
       <p class="gratitude-gallery-text">"${escapeHtml(prayer.gratitudeNote)}"</p>
       <p class="gratitude-gallery-prayer">— from <strong>${escapeHtml(prayer.title)}</strong></p>
-      <p class="gratitude-gallery-date">💛 ${prayer.answeredDate}</p>
+      <p class="gratitude-gallery-date">💛 ${formatDate(prayer.answeredAt) || prayer.answeredDate}</p>
     `;
     gratitudeGrid.appendChild(card);
   });
@@ -386,7 +404,7 @@ function createPrayerCard(prayer) {
   card.dataset.id = prayer.id;
 
   const statusLabel = prayer.status === 'answered' ? 'Answered' : 'Pending';
-  const waitingStr = prayer.status === 'pending' ? formatWaitingDays(prayer.date) : '';
+  const waitingStr = prayer.status === 'pending' ? formatWaitingDays(prayer.createdAt || prayer.date) : '';
 
   card.innerHTML = `
     <div class="card-header">
@@ -394,9 +412,9 @@ function createPrayerCard(prayer) {
       <span class="card-status-badge">${statusLabel}</span>
     </div>
     <p class="card-desc">${escapeHtml(prayer.description)}</p>
-    <p class="card-date">📅 ${prayer.date}</p>
+    <p class="card-date">📅 Created: ${formatDate(prayer.createdAt)}</p>
     ${prayer.status === 'pending' ? `<p class="card-waiting-date">⏳ Waiting: <strong>${waitingStr}</strong></p>` : ''}
-    ${prayer.status === 'answered' && prayer.answeredDate ? `<p class="card-answered-date">🙌 Answered on: ${prayer.answeredDate}</p>` : ''}
+    ${prayer.status === 'answered' && (prayer.answeredAt || prayer.answeredDate) ? `<p class="card-answered-date">🙌 Answered: ${formatDate(prayer.answeredAt) || prayer.answeredDate}</p>` : ''}
 
     ${prayer.songLink ? `
       <div class="card-actions" style="border-top: none; padding-top: 0; margin-top: 0;">
@@ -491,6 +509,7 @@ function handleFormSubmit(e) {
       prayer.description = description;
       prayer.songLink = songLink || '';
       prayer.date = getDateStr();
+      prayer.createdAt = prayer.createdAt || new Date().toISOString();
       // Preserve answered status and dates if it was already answered
       if (!wasAnswered) {
         prayer.status = 'pending';
@@ -500,14 +519,17 @@ function handleFormSubmit(e) {
       resetForm();
     }
   } else {
+    const now = new Date().toISOString();
     const newPrayer = {
       id: generateId(),
       title,
       description,
       songLink: songLink || '',
       date: getDateStr(),
+      createdAt: now,
       status: 'pending',
       answeredDate: null,
+      answeredAt: null,
       gratitudeNote: ''
     };
     prayers.unshift(newPrayer);
@@ -521,8 +543,10 @@ function markPrayerAnswered(id) {
   const prayer = prayers.find(p => p.id === id);
   if (!prayer) return;
 
+  const now = new Date().toISOString();
   prayer.status = 'answered';
   prayer.answeredDate = getShortDate();
+  prayer.answeredAt = now;
   saveToStorage();
   renderPrayers();
 
