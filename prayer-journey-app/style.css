@@ -579,6 +579,189 @@ img {
   gap: 6px;
 }
 
+/* ----- Prayer Stats Section ----- */
+.stats-section {
+  margin-bottom: 28px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 16px 12px;
+  text-align: center;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border);
+  transition: transform var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-number {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-light);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.stat-total .stat-number {
+  color: var(--primary);
+}
+
+.stat-answered .stat-number {
+  color: var(--success);
+}
+
+.stat-pending .stat-number {
+  color: var(--secondary);
+}
+
+@media (min-width: 640px) {
+  .stat-number {
+    font-size: 2.2rem;
+  }
+}
+
+/* ----- Gratitude Gallery ----- */
+.gratitude-gallery-section {
+  margin-bottom: 32px;
+}
+
+.gratitude-gallery-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gratitude-gallery-card {
+  background: linear-gradient(135deg, var(--success-light), #FFFFFF);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  border-left: 4px solid var(--success);
+  border: 1px solid #BBF7D0;
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.gratitude-gallery-card:hover {
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.gratitude-gallery-text {
+  font-size: 0.92rem;
+  font-style: italic;
+  color: #166534;
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+.gratitude-gallery-prayer {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  margin-bottom: 2px;
+}
+
+.gratitude-gallery-date {
+  font-size: 0.72rem;
+  color: var(--success);
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .gratitude-gallery-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+}
+
+/* ----- Waiting days display ----- */
+.card-waiting-date {
+  font-size: 0.78rem;
+  color: var(--secondary);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.card-waiting-date strong {
+  font-weight: 700;
+}
+
+/* ----- Gratitude display (inside card) ----- */
+.gratitude-display {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.gratitude-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.gratitude-display .gratitude-text {
+  margin-bottom: 0;
+}
+
+/* ----- Celebration Particles ----- */
+.celebration-particle {
+  position: fixed;
+  top: -10%;
+  z-index: 9999;
+  pointer-events: none;
+  animation: celebrationFall 2.8s ease-out forwards;
+  font-size: 1.5rem;
+}
+
+@keyframes celebrationFall {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(105vh) translateX(var(--drift, 50px)) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* ----- Answered card glow ----- */
+.prayer-card.answered {
+  animation: answeredGlow 2s ease-out;
+}
+
+@keyframes answeredGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 24px 8px rgba(34, 197, 94, 0.2);
+  }
+  100% {
+    box-shadow: var(--card-shadow);
+  }
+}
+
 /* ----- Empty State ----- */
 .empty-state {
   text-align: center;

@@ -4,7 +4,7 @@
 
 // ===== DATA STORE =====
 
-// Array of Bible verses with references
+// Array of Bible verses — focused on prayer, waiting on God, faith, patience
 const bibleVerses = [
   { text: "Be strong and courageous. Do not be afraid; do not be discouraged, for the LORD your God will be with you wherever you go.", ref: "Joshua 1:9" },
   { text: "The LORD is my shepherd, I lack nothing.", ref: "Psalm 23:1" },
@@ -20,7 +20,34 @@ const bibleVerses = [
   { text: "But those who hope in the LORD will renew their strength. They will soar on wings like eagles.", ref: "Isaiah 40:31" },
   { text: "God is our refuge and strength, an ever-present help in trouble.", ref: "Psalm 46:1" },
   { text: "Ask and it will be given to you; seek and you will find; knock and the door will be opened to you.", ref: "Matthew 7:7" },
-  { text: "Delight yourself in the LORD, and he will give you the desires of your heart.", ref: "Psalm 37:4" }
+  { text: "Delight yourself in the LORD, and he will give you the desires of your heart.", ref: "Psalm 37:4" },
+  // ——— Prayer & Waiting on God ———
+  { text: "Wait for the LORD; be strong and take heart and wait for the LORD.", ref: "Psalm 27:14" },
+  { text: "But they who wait for the LORD shall renew their strength; they shall mount up with wings like eagles.", ref: "Isaiah 40:31" },
+  { text: "The LORD is good to those who wait for him, to the soul who seeks him.", ref: "Lamentations 3:25" },
+  { text: "Be still before the LORD and wait patiently for him.", ref: "Psalm 37:7" },
+  { text: "I wait for the LORD, my whole being waits, and in his word I put my hope.", ref: "Psalm 130:5" },
+  { text: "Yet the LORD longs to be gracious to you; therefore he will rise up to show you compassion. Blessed are all who wait for him!", ref: "Isaiah 30:18" },
+  { text: "Therefore I tell you, whatever you ask for in prayer, believe that you have received it, and it will be yours.", ref: "Mark 11:24" },
+  { text: "If you remain in me and my words remain in you, ask whatever you wish, and it will be done for you.", ref: "John 15:7" },
+  { text: "This is the confidence we have in approaching God: that if we ask anything according to his will, he hears us.", ref: "1 John 5:14" },
+  { text: "Devote yourselves to prayer, being watchful and thankful.", ref: "Colossians 4:2" },
+  { text: "Pray without ceasing.", ref: "1 Thessalonians 5:17" },
+  { text: "The LORD has heard my cry for mercy; the LORD accepts my prayer.", ref: "Psalm 6:9" },
+  { text: "In the morning, LORD, you hear my voice; in the morning I lay my requests before you and wait expectantly.", ref: "Psalm 5:3" },
+  { text: "Let us then approach God's throne of grace with confidence, so that we may receive mercy and find grace to help us in our time of need.", ref: "Hebrews 4:16" },
+  { text: "Call to me and I will answer you and tell you great and unsearchable things you do not know.", ref: "Jeremiah 33:3" },
+  { text: "Before they call I will answer; while they are still speaking I will hear.", ref: "Isaiah 65:24" },
+  { text: "The LORD is near to all who call on him, to all who call on him in truth.", ref: "Psalm 145:18" },
+  { text: "He will call on me, and I will answer him; I will be with him in trouble, I will deliver him and honor him.", ref: "Psalm 91:15" },
+  { text: "Be joyful in hope, patient in affliction, faithful in prayer.", ref: "Romans 12:12" },
+  { text: "Consider it pure joy, my brothers and sisters, whenever you face trials of many kinds, because you know that the testing of your faith produces perseverance.", ref: "James 1:2-3" },
+  { text: "But if we hope for what we do not yet have, we wait for it patiently.", ref: "Romans 8:25" },
+  { text: "The waiting period is not wasted time — it is preparation time. God is working behind the scenes.", ref: "Isaiah 64:4" },
+  { text: "My soul, wait silently for God alone, for my expectation is from Him.", ref: "Psalm 62:5" },
+  { text: "I would have lost heart, unless I had believed that I would see the goodness of the LORD in the land of the living. Wait on the LORD; be of good courage, and He shall strengthen your heart.", ref: "Psalm 27:13-14" },
+  { text: "The LORD will fight for you; you need only to be still.", ref: "Exodus 14:14" },
+  { text: "Commit your way to the LORD; trust in him and he will do this.", ref: "Psalm 37:5" }
 ];
 
 // Array of rotating faith moments
@@ -36,7 +63,10 @@ const faithMoments = [
   "Peace does not mean to be in a place where there is no noise — it means to be calm in the middle of the storm.",
   "What God has for you is better than anything you can imagine.",
   "Your testimony is someone else's survival guide.",
-  "He who began a good work in you will carry it on to completion."
+  "He who began a good work in you will carry it on to completion.",
+  "Waiting on God is never a detour — it is part of the journey.",
+  "Your breakthrough is closer than it appears. Keep praying.",
+  "God's timing is never late and never early — it is always perfect."
 ];
 
 // ===== STATE =====
@@ -61,6 +91,11 @@ const verseCard = document.getElementById('verseCard');
 const faithText = document.getElementById('faithText');
 const nextFaithBtn = document.getElementById('nextFaithBtn');
 const filterBtns = document.querySelectorAll('.filter-btn');
+const statsTotal = document.getElementById('statsTotal');
+const statsAnswered = document.getElementById('statsAnswered');
+const statsPending = document.getElementById('statsPending');
+const gratitudeGrid = document.getElementById('gratitudeGrid');
+const emptyGratitude = document.getElementById('emptyGratitude');
 
 // ===== UTILITY FUNCTIONS =====
 
@@ -81,6 +116,22 @@ function getShortDate() {
 
 function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+/** Days between two date strings and now */
+function daysSince(dateStr) {
+  const then = new Date(dateStr);
+  const now = new Date();
+  const diff = Math.floor((now - then) / (1000 * 60 * 60 * 24));
+  return diff;
+}
+
+/** Format days since into a readable waiting string */
+function formatWaitingDays(dateStr) {
+  const days = daysSince(dateStr);
+  if (days === 0) return 'Today';
+  if (days === 1) return '1 day';
+  return days + ' days';
 }
 
 // ===== LOCAL STORAGE =====
@@ -123,11 +174,72 @@ function showNextFaith() {
   showFaithMoment(faithIndex);
 }
 
+// ===== STATS =====
+
+function renderStats() {
+  const total = prayers.length;
+  const answered = prayers.filter(p => p.status === 'answered').length;
+  const pending = total - answered;
+
+  statsTotal.textContent = total;
+  statsAnswered.textContent = answered;
+  statsPending.textContent = pending;
+}
+
+// ===== GRATITUDE GALLERY =====
+
+function renderGratitudeGallery() {
+  const gratitudeNotes = prayers.filter(p => p.status === 'answered' && p.gratitudeNote);
+
+  if (gratitudeNotes.length === 0) {
+    gratitudeGrid.innerHTML = '';
+    emptyGratitude.classList.remove('hidden');
+    return;
+  }
+
+  emptyGratitude.classList.add('hidden');
+  gratitudeGrid.innerHTML = '';
+
+  gratitudeNotes.forEach(prayer => {
+    const card = document.createElement('div');
+    card.className = 'gratitude-gallery-card';
+    card.innerHTML = `
+      <p class="gratitude-gallery-text">"${escapeHtml(prayer.gratitudeNote)}"</p>
+      <p class="gratitude-gallery-prayer">— from <strong>${escapeHtml(prayer.title)}</strong></p>
+      <p class="gratitude-gallery-date">💛 ${prayer.answeredDate}</p>
+    `;
+    gratitudeGrid.appendChild(card);
+  });
+}
+
 // ===== FILTER PRAYERS =====
 
 function getFilteredPrayers() {
   if (currentFilter === 'all') return prayers;
   return prayers.filter(p => p.status === currentFilter);
+}
+
+// ===== CELEBRATION EFFECT =====
+
+function triggerCelebration() {
+  // Create floating celebration particles
+  const emojis = ['🙌', '✨', '💛', '🌟', '🎉', '🙏', '❤️', '🕊️', '☀️', '🌻'];
+  const container = document.body;
+
+  for (let i = 0; i < 30; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'celebration-particle';
+    particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.animationDelay = Math.random() * 1.5 + 's';
+    particle.style.fontSize = (Math.random() * 20 + 16) + 'px';
+    // random horizontal drift
+    particle.style.setProperty('--drift', (Math.random() * 200 - 100) + 'px');
+    container.appendChild(particle);
+
+    // Remove after animation
+    setTimeout(() => particle.remove(), 3000);
+  }
 }
 
 // ===== RENDER PRAYER CARDS =====
@@ -158,6 +270,10 @@ function renderPrayers() {
   filterBtns.forEach(btn => {
     btn.classList.toggle('active', btn.dataset.filter === currentFilter);
   });
+
+  // Update stats and gratitude gallery
+  renderStats();
+  renderGratitudeGallery();
 }
 
 function createPrayerCard(prayer) {
@@ -166,6 +282,7 @@ function createPrayerCard(prayer) {
   card.dataset.id = prayer.id;
 
   const statusLabel = prayer.status === 'answered' ? 'Answered' : 'Pending';
+  const waitingStr = prayer.status === 'pending' ? formatWaitingDays(prayer.date) : '';
 
   card.innerHTML = `
     <div class="card-header">
@@ -174,6 +291,7 @@ function createPrayerCard(prayer) {
     </div>
     <p class="card-desc">${escapeHtml(prayer.description)}</p>
     <p class="card-date">📅 ${prayer.date}</p>
+    ${prayer.status === 'pending' ? `<p class="card-waiting-date">⏳ Waiting: <strong>${waitingStr}</strong></p>` : ''}
     ${prayer.status === 'answered' && prayer.answeredDate ? `<p class="card-answered-date">🙌 Answered on: ${prayer.answeredDate}</p>` : ''}
 
     ${prayer.songLink ? `
@@ -187,15 +305,18 @@ function createPrayerCard(prayer) {
     ${prayer.status === 'answered' ? `
       <div class="gratitude-section">
         ${prayer.gratitudeNote ? `
-          <p class="gratitude-text">💛 "${escapeHtml(prayer.gratitudeNote)}"</p>
+          <div class="gratitude-display">
+            <span class="gratitude-icon">💛</span>
+            <p class="gratitude-text">"${escapeHtml(prayer.gratitudeNote)}"</p>
+          </div>
           <div class="gratitude-actions">
             <button class="btn btn-small btn-outline edit-gratitude-btn" data-id="${prayer.id}">
-              <i class="fas fa-edit"></i> Edit
+              <i class="fas fa-edit"></i> Edit Gratitude
             </button>
           </div>
         ` : `
           <label for="gratitude-${prayer.id}"><i class="fas fa-heart"></i> Gratitude Reflection</label>
-          <textarea id="gratitude-${prayer.id}" class="gratitude-input" rows="2" placeholder="What are you grateful for?"></textarea>
+          <textarea id="gratitude-${prayer.id}" class="gratitude-input" rows="2" placeholder="What are you grateful for? How did God move?"></textarea>
           <div class="gratitude-actions">
             <button class="btn btn-small btn-success save-gratitude-btn" data-id="${prayer.id}">
               <i class="fas fa-check"></i> Save Gratitude
@@ -208,7 +329,7 @@ function createPrayerCard(prayer) {
     <div class="card-actions">
       ${prayer.status === 'pending' ? `
         <button class="btn btn-small btn-success mark-answered-btn" data-id="${prayer.id}">
-          <i class="fas fa-check-circle"></i> Answered
+          <i class="fas fa-check-circle"></i> Mark Answered
         </button>
       ` : ''}
       <button class="btn btn-small btn-outline edit-btn" data-id="${prayer.id}">
@@ -247,7 +368,6 @@ function createPrayerCard(prayer) {
 
 // ===== CRUD OPERATIONS =====
 
-// Create / Update prayer
 function handleFormSubmit(e) {
   e.preventDefault();
 
@@ -260,19 +380,22 @@ function handleFormSubmit(e) {
   const editId = editIdInput.value;
 
   if (editId) {
-    // Update existing prayer
     const prayer = prayers.find(p => p.id === editId);
     if (prayer) {
+      const wasAnswered = prayer.status === 'answered';
       prayer.title = title;
       prayer.description = description;
       prayer.songLink = songLink || '';
       prayer.date = getDateStr();
+      // Preserve answered status and dates if it was already answered
+      if (!wasAnswered) {
+        prayer.status = 'pending';
+      }
       saveToStorage();
       renderPrayers();
       resetForm();
     }
   } else {
-    // Create new prayer
     const newPrayer = {
       id: generateId(),
       title,
@@ -290,7 +413,6 @@ function handleFormSubmit(e) {
   }
 }
 
-// Mark prayer as answered
 function markPrayerAnswered(id) {
   const prayer = prayers.find(p => p.id === id);
   if (!prayer) return;
@@ -299,9 +421,11 @@ function markPrayerAnswered(id) {
   prayer.answeredDate = getShortDate();
   saveToStorage();
   renderPrayers();
+
+  // Trigger celebration effect
+  triggerCelebration();
 }
 
-// Save gratitude note
 function saveGratitude(id, cardElement) {
   const prayer = prayers.find(p => p.id === id);
   if (!prayer) return;
@@ -315,7 +439,6 @@ function saveGratitude(id, cardElement) {
   renderPrayers();
 }
 
-// Edit gratitude note (switches back to textarea mode)
 function editGratitude(id, cardElement) {
   const prayer = prayers.find(p => p.id === id);
   if (!prayer) return;
@@ -323,7 +446,7 @@ function editGratitude(id, cardElement) {
   const section = cardElement.querySelector('.gratitude-section');
   section.innerHTML = `
     <label for="gratitude-edit-${id}"><i class="fas fa-heart"></i> Gratitude Reflection</label>
-    <textarea id="gratitude-edit-${id}" class="gratitude-input" rows="2" placeholder="What are you grateful for?">${escapeHtml(prayer.gratitudeNote)}</textarea>
+    <textarea id="gratitude-edit-${id}" class="gratitude-input" rows="2" placeholder="What are you grateful for? How did God move?">${escapeHtml(prayer.gratitudeNote)}</textarea>
     <div class="gratitude-actions">
       <button class="btn btn-small btn-success save-gratitude-btn" data-id="${id}">
         <i class="fas fa-check"></i> Save Gratitude
@@ -335,7 +458,6 @@ function editGratitude(id, cardElement) {
   saveBtn.addEventListener('click', () => saveGratitude(id, cardElement));
 }
 
-// Start edit mode
 function startEdit(id) {
   const prayer = prayers.find(p => p.id === id);
   if (!prayer) return;
@@ -347,11 +469,9 @@ function startEdit(id) {
   formSubmitBtn.innerHTML = '<i class="fas fa-save"></i> Update Prayer';
   editMode = true;
 
-  // Scroll to form
   prayerForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// Delete prayer
 function deletePrayer(id) {
   if (!confirm('Are you sure you want to delete this prayer?')) return;
 
@@ -359,13 +479,11 @@ function deletePrayer(id) {
   saveToStorage();
   renderPrayers();
 
-  // If we were editing this prayer, reset form
   if (editIdInput.value === id) {
     resetForm();
   }
 }
 
-// Reset form
 function resetForm() {
   prayerForm.reset();
   editIdInput.value = '';
@@ -391,33 +509,19 @@ function escapeHtml(str) {
 // ===== INITIALIZATION =====
 
 function init() {
-  // Load data from localStorage
   loadFromStorage();
-
-  // Show random Bible verse
   showRandomVerse();
-
-  // Show first faith moment
   showFaithMoment(0);
-
-  // Render existing prayers
   renderPrayers();
 
-  // ---- Event Listeners ----
-
-  // Form submit
+  // Event Listeners
   prayerForm.addEventListener('submit', handleFormSubmit);
-
-  // Next faith moment
   nextFaithBtn.addEventListener('click', showNextFaith);
 
-  // Filter buttons
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => setFilter(btn.dataset.filter));
   });
 
-  // Reset form when clicking cancel (pressing Escape will naturally reset)
-  // Add keyboard shortcut: Escape resets form
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && editMode) {
       resetForm();
